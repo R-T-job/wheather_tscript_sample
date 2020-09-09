@@ -11,6 +11,7 @@ import Location from '@/components/organism/Location.vue';
 import Temperature from '@/components/organism/Temperature.vue';
 
 import axios from 'axios'
+import * as dotenv from "dotenv";
 
 @Component({
   components: {
@@ -42,7 +43,7 @@ export default class App extends Vue {
       navigator.geolocation.getCurrentPosition(position => {
         let lon: number = position.coords.longitude;
         let lat: number = position.coords.latitude;
-        const appid: string = '9aa48215a10b18b7de567a747bb16e39';
+        const appid = process.env.VUE_APP_APP_ID;
         const units: string = "metric"
         const apiURL:string = 'https://api.openweathermap.org/data/2.5/weather'
 
