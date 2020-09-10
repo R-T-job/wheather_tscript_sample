@@ -5,6 +5,7 @@
   </div>
 </template>
 <script lang="ts">
+  import { defineComponent } from "@vue/composition-api";
   import {Component, Prop, Watch, Vue} from "vue-property-decorator";  
 
   @Component

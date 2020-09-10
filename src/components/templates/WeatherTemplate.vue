@@ -11,7 +11,7 @@ import Location from '@/components/organism/Location.vue';
 import Temperature from '@/components/organism/Temperature.vue';
 
 import axios from 'axios'
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 
 @Component({
   components: {
