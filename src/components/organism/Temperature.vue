@@ -9,32 +9,64 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Watch, Vue} from "vue-property-decorator";  
+import { defineComponent, computed, reactive, ref, watch }  from "@vue/composition-api";
+import {Component, Prop, Watch, Vue } from "vue-property-decorator";  
 
-@Component
-export default class Temperature extends Vue {
-  private degreeSpan: string = "C";
-  private innerTempratureDegree: number = 0;
+  type TempratureProp = {
+    tempCentigrade: number
+    tempratureDegree: number
+    tempratureDescription: string
+  };
 
-  @Prop()　public tempCentigrade!: number;
-  @Prop()　public tempratureDegree!: number;
-  @Prop()　public tempratureDescription!: string;
+  interface WeatherState {
+    degreeSpan: string;
+    innerTempratureDegree: number;
+  }
+  export default defineComponent({
+    props: {
+      tempCentigrade: {
+        type: Number,
+        default: 0
+      },
+      tempratureDegree: {
+        type: Number,
+        default: 0
+      },
+      tempratureDescription: {
+        type: String,
+        default: ""
+      },
+    },
+    setup(props: TempratureProp, context) {
 
-  changeDegree(){
-    if(this.degreeSpan === "C"){
-      this.degreeSpan = "F";
-      let farenheit = (this.tempratureDegree) * (9 / 5) + 32
-      this.innerTempratureDegree = Math.floor(farenheit);
-    } else {
-      this.degreeSpan = "C";
-      this.innerTempratureDegree = this.tempCentigrade;
+      let tempratureDescriptionValue = ref(props.tempratureDescription)
+      let innerTempratureDegree =ref(props.tempratureDegree)
+      let degreeSpan = "C"
+      
+      const changeDegree = () => {
+        if(degreeSpan === "C"){
+            degreeSpan = "F";
+            let farenheit = (props.tempratureDegree) * (9 / 5) + 32
+            innerTempratureDegree.value = Math.floor(farenheit);
+        } else {
+          degreeSpan = "C";
+          innerTempratureDegree.value = props.tempratureDegree;
+        }
+      };
+
+      watch(() => props.tempratureDegree, (newValue) => {
+        innerTempratureDegree.value = newValue;
+      });
+
+
+      return {
+        tempratureDescriptionValue,
+        innerTempratureDegree,
+        degreeSpan,
+        changeDegree
+      };
     }
-  }
-  @Watch('tempratureDegree', {immediate: true})
-  private changeTempratureDegree(value: number){
-    this.innerTempratureDegree = value;
-  }
-}
+  });
 </script>
 
 <style>
